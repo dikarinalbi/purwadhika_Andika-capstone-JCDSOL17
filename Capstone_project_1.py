@@ -6,9 +6,9 @@ patients = {
         "name" : "Andi Surandi",
         "age" : 27,
         "gender" : "Laki-Laki",
+        "contact_info" : "081234567890",
         "diagnosis" : "Bronchitis",
         "appointment_date" : "01-01-2023",
-        "contact_info" : "081234567890",
         "doctor" : "Dr. Budi"
     },
     "patient_2" : {
@@ -16,20 +16,43 @@ patients = {
         "age" : 56,
         "gender" : "Perempuan",
         "diagnosis" : "Diabetes",
-        "appointment_date" : "03-06-2023",
         "contact_info" : "081122334899",
+        "appointment_date" : "03-06-2023",
         "doctor" : "Dr. Mariska"
     },
     "patient_3" : {
         "name" : "Kenzi Suwono",
         "age" : 13,
         "gender" : "Laki-Laki",
+        "contact_info" : "0811122338899",
         "diagnosis" : "Flu Berat",
         "appointment_date" : "01-01-2023",
-        "contact_info" : "0811122338899",
         "doctor" : "Dr. Hartono"
     }
 }
+
+def val_cannot_empty(value):
+    if len(value) == 0:
+        raise ValueError("Value cannot be empty")
+    return value
+
+def val_must_digit(value):
+    if not value.isdigit():
+        raise ValueError("Value must be a digit")
+    return int(value)
+
+def val_gender(value):
+    if value not in ["Laki-Laki", "Perempuan"]:
+        raise ValueError("Gender must be 'Laki-Laki' or 'Perempuan'")
+    return value
+
+def get_valid_input(prompt, val_funct):
+    try:
+        value = val_funct(input(prompt))
+        return value
+    except ValueError as e:
+        print(e)
+        return get_valid_input(prompt, val_funct)
 
 def show_patient():
     print("\n--- Patient Data ---")
@@ -37,73 +60,83 @@ def show_patient():
     for patient_id, patient_data in patients.items():
         print(f"{patient_id}\t | {patient_data['name']}\t | {patient_data['age']}\t | {patient_data['gender']}\t")
     
-    view_details = input("\nDo you want to view details of a specific patient? (yes/no): ")
+    view_details = get_valid_input("\nDo you want to view details of a specific patient? (yes/no): ", val_cannot_empty)
     if view_details.lower() == "yes":
-        patient_id = input("Enter the ID of the patient you want to view details: ")
+        patient_id = get_valid_input("Enter the ID of the patient you want to view details: ", val_cannot_empty)
         if patient_id in patients:
             print("ID\t\t | Name\t\t | Age\t | Gender\t | Diagnosis\t | Appointment Date\t | Contact Info\t\t | Doctor\t ")
             print(f"{patient_id}\t | {patient_data['name']}\t | {patient_data['age']}\t | {patient_data['gender']}\t | {patient_data['diagnosis']}\t | {patient_data['appointment_date']}\t\t | {patient_data['contact_info']}\t\t | {patient_data['doctor']}\t")
 
+def show_all_patientinfo():
+    print("\n--- Patient Data ---")
+    print("ID\t\t | Name\t\t | Age\t | Gender\t")
+    for patient_id, patient_data in patients.items():
+        print(f"{patient_id}\t | {patient_data['name']}\t | {patient_data['age']}\t | {patient_data['gender']}\t | {patient_data['diagnosis']}\t | {patient_data['appointment_date']}\t\t | {patient_data['contact_info']}\t\t | {patient_data['doctor']}\t")
 
 def add_patient():
     patient_id = f"patient_{len(patients) + 1}"
 
     print("\n--- Add New Patient ---")
-    name = input("Enter patient's name: ")
-    age = input("Enter patient's age: ")
-    gender = input("Enter patient's gender (Laki-Laki/Perempuan): ")
-    diagnosis = input("Enter patient's diagnosis: ")
+    name = get_valid_input("Enter patient's name: ", val_cannot_empty)
+    age = get_valid_input("Enter patient's age: ", val_must_digit)
+    gender = get_valid_input("Enter patient's gender (Laki-Laki/Perempuan): ", val_gender)
+    contact_info = get_valid_input("Enter contact information: ", val_cannot_empty)
+    diagnosis = get_valid_input("Enter patient's diagnosis: ", val_cannot_empty)
     appointment_date = input("Enter admission date (DD-MM-YYYY): ")
-    contact_info = input("Enter contact information: ")
-    assigned_doctor = input("Enter assigned doctor's name: ")
+    assigned_doctor = get_valid_input("Enter assigned doctor's name: ", val_cannot_empty)
 
     patients[patient_id] = {
         "name": name,
         "age": age,
         "gender": gender,
+        "contact_info": contact_info,
         "diagnosis": diagnosis,
         "appointment_date": appointment_date,
-        "contact_info": contact_info,
         "doctor": assigned_doctor
     }
 
     print(f"\n{patient_id} added successfully!\n")
+    show_all_patientinfo()
 
 def update_patient():
-    patient_id = input("Enter the ID of the patient you want to update: ")
+    show_all_patientinfo()
+    patient_id = get_valid_input("Enter the ID of the patient you want to update: ", val_cannot_empty)
     if patient_id in patients:
         print("\n--- Update Patient Data ---")
-        name = input("Enter patient's name: ")
-        age = input("Enter patient's age: ")
-        gender = input("Enter patient's gender (Laki-Laki/Perempuan): ")
-        diagnosis = input("Enter patient's diagnosis: ")
+        name = get_valid_input("Enter patient's name: ", val_cannot_empty)
+        age = get_valid_input("Enter patient's age: ", val_must_digit)
+        gender = get_valid_input("Enter patient's gender (Laki-Laki/Perempuan): ", val_gender)
+        contact_info = get_valid_input("Enter contact information: ", val_cannot_empty)
+        diagnosis = get_valid_input("Enter patient's diagnosis: ", val_cannot_empty)
         appointment_date = input("Enter admission date (DD-MM-YYYY): ")
-        contact_info = input("Enter contact information: ")
-        assigned_doctor = input("Enter assigned doctor's name: ")
-    
+        assigned_doctor = get_valid_input("Enter assigned doctor's name: ", val_cannot_empty)
+
         patients[patient_id] = {
             "name": name,
             "age": age,
             "gender": gender,
+            "contact_info": contact_info,
             "diagnosis": diagnosis,
             "appointment_date": appointment_date,
-            "contact_info": contact_info,
             "doctor": assigned_doctor
         }
+        show_all_patientinfo()
         print(f"\n{patient_id} updated successfully!\n")
     else:
         print(f"\n{patient_id} not found!\n")
 
 def delete_patient():
     print("\n--- Delete Patient Data ---")
-    patient_id = input("Enter the ID of the patient you want to delete: ")
+    patient_id = get_valid_input("Enter the ID of the patient you want to delete: ", val_cannot_empty)
     if patient_id in patients:
-        confirm = input(f"Are you sure you want to delete {patient_id}? (yes/no): ")
+        confirm = get_valid_input(f"Are you sure you want to delete {patient_id}? (yes/no): ", val_cannot_empty)
         if confirm == "yes":
             del patients[patient_id]
             print(f"\n{patient_id} deleted successfully!\n")
+            show_all_patientinfo()
         else:
             print("Deletion canceled.\n")
+            show_all_patientinfo()
     else:
         print(f"\n{patient_id} not found!\n")
 

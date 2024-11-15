@@ -47,20 +47,20 @@ def val_gender(value):
     return value
 
 def val_date(value):
-    day = value[0:2]
-    month = value[3:5]
-    year = value[6:10]
+    day, month, year = value.split("-")
 
+    if len(day) != 2 or len(month) != 2 or len(year) != 4:
+        raise ValueError("Date must be in DD-MM-YYYY format.")
     if not (day.isdigit() and month.isdigit() and year.isdigit()):
-        raise ValueError("Invalid date format")
+        raise ValueError("Date must be in DD-MM-YYYY format.")
     
     day, month, year = int(day), int(month), int(year)
     if not (1 <= day <= 31):
         raise ValueError("Day must be between 1 and 31.")
     if not (1 <= month <= 12):
         raise ValueError("Month must be between 1 and 12.")
-    if not (year >= 0):
-        raise ValueError("Year must be a positive number.")
+    if not (1900 < year <= 2024):
+        raise ValueError("Year must be between 1900 and 2024.")
     
     return value
 

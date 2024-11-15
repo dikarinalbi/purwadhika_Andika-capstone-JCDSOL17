@@ -46,12 +46,30 @@ def val_gender(value):
         raise ValueError("Gender must be 'Laki-Laki' or 'Perempuan'")
     return value
 
+def val_date(value):
+    day = value[0:2]
+    month = value[3:5]
+    year = value[6:10]
+
+    if not (day.isdigit() and month.isdigit() and year.isdigit()):
+        raise ValueError("Invalid date format")
+    
+    day, month, year = int(day), int(month), int(year)
+    if not (1 <= day <= 31):
+        raise ValueError("Day must be between 1 and 31.")
+    if not (1 <= month <= 12):
+        raise ValueError("Month must be between 1 and 12.")
+    if not (year >= 0):
+        raise ValueError("Year must be a positive number.")
+    
+    return value
+
 def get_valid_input(prompt, val_funct):
     try:
         value = val_funct(input(prompt))
         return value
     except ValueError as e:
-        print(e)
+        print(f"Error: {e}")
         return get_valid_input(prompt, val_funct)
 
 def show_patient():
@@ -82,7 +100,7 @@ def add_patient():
     gender = get_valid_input("Enter patient's gender (Laki-Laki/Perempuan): ", val_gender)
     contact_info = get_valid_input("Enter contact information: ", val_cannot_empty)
     diagnosis = get_valid_input("Enter patient's diagnosis: ", val_cannot_empty)
-    appointment_date = input("Enter admission date (DD-MM-YYYY): ")
+    appointment_date = get_valid_input("Enter admission date (DD-MM-YYYY): ", val_date)
     assigned_doctor = get_valid_input("Enter assigned doctor's name: ", val_cannot_empty)
 
     patients[patient_id] = {

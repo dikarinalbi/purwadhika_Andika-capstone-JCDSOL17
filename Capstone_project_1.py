@@ -7,8 +7,8 @@ patients = {
         "age" : 27,
         "gender" : "Laki-Laki",
         "contact_info" : "081234567890",
-        "diagnosis" : "Bronchitis",
         "appointment_date" : "01-01-2023",
+        "diagnosis" : "Bronchitis",
         "doctor" : "Dr. Budi"
     },
     "patient_2" : {
@@ -16,8 +16,8 @@ patients = {
         "age" : 56,
         "gender" : "Perempuan",
         "diagnosis" : "Diabetes",
-        "contact_info" : "081122334899",
         "appointment_date" : "03-06-2023",
+        "contact_info" : "081122334899",
         "doctor" : "Dr. Mariska"
     },
     "patient_3" : {
@@ -25,8 +25,8 @@ patients = {
         "age" : 13,
         "gender" : "Laki-Laki",
         "contact_info" : "0811122338899",
-        "diagnosis" : "Flu Berat",
         "appointment_date" : "01-01-2023",
+        "diagnosis" : "Flu Berat",
         "doctor" : "Dr. Hartono"
     }
 }
@@ -42,8 +42,8 @@ def val_must_digit(value):
     return int(value)
 
 def val_gender(value):
-    if value not in ["Laki-Laki", "Perempuan"]:
-        raise ValueError("Gender must be 'Laki-Laki' or 'Perempuan'")
+    if value not in ["L", "P"]:
+        raise ValueError("Gender must be 'L' or 'P'")
     return value
 
 def val_date(value):
@@ -73,6 +73,10 @@ def get_valid_input(prompt, val_funct):
         return get_valid_input(prompt, val_funct)
 
 def show_patient():
+    if len(patients) == 0:
+        print("No patient data available.")
+        return
+    
     print("\n--- Patient Data ---")
     print("ID\t\t | Name\t\t | Age\t | Gender\t")
     for patient_id, patient_data in patients.items():
@@ -97,7 +101,8 @@ def add_patient():
     print("\n--- Add New Patient ---")
     name = get_valid_input("Enter patient's name: ", val_cannot_empty)
     age = get_valid_input("Enter patient's age: ", val_must_digit)
-    gender = get_valid_input("Enter patient's gender (Laki-Laki/Perempuan): ", val_gender)
+    gender = get_valid_input("Enter patient's gender (L/P): ", val_gender)
+    gender = "Laki-Laki" if gender == "L" else "Perempuan"
     contact_info = get_valid_input("Enter contact information: ", val_cannot_empty)
     diagnosis = get_valid_input("Enter patient's diagnosis: ", val_cannot_empty)
     appointment_date = get_valid_input("Enter admission date (DD-MM-YYYY): ", val_date)
@@ -108,8 +113,8 @@ def add_patient():
         "age": age,
         "gender": gender,
         "contact_info": contact_info,
-        "diagnosis": diagnosis,
         "appointment_date": appointment_date,
+        "diagnosis": diagnosis,
         "doctor": assigned_doctor
     }
 
@@ -123,7 +128,8 @@ def update_patient():
         print("\n--- Update Patient Data ---")
         name = get_valid_input("Enter patient's name: ", val_cannot_empty)
         age = get_valid_input("Enter patient's age: ", val_must_digit)
-        gender = get_valid_input("Enter patient's gender (Laki-Laki/Perempuan): ", val_gender)
+        gender = get_valid_input("Enter patient's gender (L/P): ", val_gender)
+        gender = "Laki-Laki" if gender == "L" else "Perempuan"
         contact_info = get_valid_input("Enter contact information: ", val_cannot_empty)
         diagnosis = get_valid_input("Enter patient's diagnosis: ", val_cannot_empty)
         appointment_date = input("Enter admission date (DD-MM-YYYY): ")
@@ -134,8 +140,8 @@ def update_patient():
             "age": age,
             "gender": gender,
             "contact_info": contact_info,
-            "diagnosis": diagnosis,
             "appointment_date": appointment_date,
+            "diagnosis": diagnosis,
             "doctor": assigned_doctor
         }
         show_all_patientinfo()
@@ -144,6 +150,7 @@ def update_patient():
         print(f"\n{patient_id} not found!\n")
 
 def delete_patient():
+    show_all_patientinfo()
     print("\n--- Delete Patient Data ---")
     patient_id = get_valid_input("Enter the ID of the patient you want to delete: ", val_cannot_empty)
     if patient_id in patients:

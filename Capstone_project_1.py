@@ -24,7 +24,7 @@ patients = {
         "name" : "Kenzi Suwono",
         "age" : 13,
         "gender" : "Laki-Laki",
-        "contact_info" : "0811122338899",
+        "contact_info" : "081112233889",
         "appointment_date" : "01-01-2023",
         "diagnosis" : "Flu Berat",
         "doctor" : "Dr. Hartono"
@@ -86,6 +86,7 @@ def show_patient():
     if view_details.lower() == "yes":
         patient_id = get_valid_input("Enter the ID of the patient you want to view details: ", val_cannot_empty)
         if patient_id in patients:
+            patient_data = patients[patient_id]
             print("ID\t\t | Name\t\t | Age\t | Gender\t | Diagnosis\t | Appointment Date\t | Contact Info\t\t | Doctor\t ")
             print(f"{patient_id}\t | {patient_data['name']}\t | {patient_data['age']}\t | {patient_data['gender']}\t | {patient_data['diagnosis']}\t | {patient_data['appointment_date']}\t\t | {patient_data['contact_info']}\t\t | {patient_data['doctor']}\t")
 
@@ -125,30 +126,56 @@ def update_patient():
     show_all_patientinfo()
     patient_id = get_valid_input("Enter the ID of the patient you want to update: ", val_cannot_empty)
     if patient_id in patients:
-        print("\n--- Update Patient Data ---")
-        name = get_valid_input("Enter patient's name: ", val_cannot_empty)
-        age = get_valid_input("Enter patient's age: ", val_must_digit)
-        gender = get_valid_input("Enter patient's gender (L/P): ", val_gender)
-        gender = "Laki-Laki" if gender == "L" else "Perempuan"
-        contact_info = get_valid_input("Enter contact information: ", val_cannot_empty)
-        diagnosis = get_valid_input("Enter patient's diagnosis: ", val_cannot_empty)
-        appointment_date = input("Enter admission date (DD-MM-YYYY): ")
-        assigned_doctor = get_valid_input("Enter assigned doctor's name: ", val_cannot_empty)
+        patient_data = patients[patient_id]
+        choice = 0
+        while choice != 8:
+            os.system("cls")
+            print("ID\t\t | Name\t\t | Age\t | Gender\t | Diagnosis\t | Appointment Date\t | Contact Info\t\t | Doctor\t ")
+            print(f"{patient_id}\t | {patient_data['name']}\t | {patient_data['age']}\t | {patient_data['gender']}\t | {patient_data['diagnosis']}\t | {patient_data['appointment_date']}\t\t | {patient_data['contact_info']}\t\t | {patient_data['doctor']}\t")
+    
+            print("\nChoose data to update:")
+            print("1. Name")
+            print("2. Age")
+            print("3. Gender")
+            print("4. Diagnosis")
+            print("5. Appointment Date")
+            print("6. Contact Info")
+            print("7. Doctor")
+            print("8. Finish Updating")
+            
+            try:
+                choice = int(input("Enter your choice: "))
+            except ValueError:
+                print("Invalid input. Please enter a number.")
+                continue
 
-        patients[patient_id] = {
-            "name": name,
-            "age": age,
-            "gender": gender,
-            "contact_info": contact_info,
-            "appointment_date": appointment_date,
-            "diagnosis": diagnosis,
-            "doctor": assigned_doctor
-        }
-        show_all_patientinfo()
-        print(f"\n{patient_id} updated successfully!\n")
+            match choice:
+                case 1:
+                    patient_data['name'] = get_valid_input("Enter new name: ", val_cannot_empty)
+                case 2:
+                    patient_data['age'] = get_valid_input("Enter new age: ", val_must_digit)
+                case 3:
+                    gender = get_valid_input("Enter new gender (L/P): ", val_gender)
+                    patient_data['gender'] = "Laki-Laki" if gender == "L" else "Perempuan"
+                case 4:
+                    patient_data['diagnosis'] = get_valid_input("Enter new diagnosis: ", val_cannot_empty)
+                case 5:
+                    patient_data['appointment_date'] = get_valid_input("Enter new appointment date (DD-MM-YYYY): ", val_date)
+                case 6:
+                    patient_data['contact_info'] = get_valid_input("Enter new contact information: ", val_cannot_empty)
+                case 7:
+                    patient_data['doctor'] = get_valid_input("Enter new doctor's name: ", val_cannot_empty)
+                case 8:
+                    break
+                case _:
+                    print("Invalid input. Please enter a number between 1 and 8.")
+            
+            print(f"\n{patient_id} updated successfully!\n")
+            input("Press Enter to continue...")
+    
     else:
         print(f"\n{patient_id} not found!\n")
-
+         
 def delete_patient():
     show_all_patientinfo()
     print("\n--- Delete Patient Data ---")
@@ -196,6 +223,8 @@ while menu != 5:
             delete_patient()
         case 5: 
             print("Exiting the program...")
+        case _:
+            print("Invalid input. Please enter a number between 1 and 5.")
 
     input("Press Enter to continue...") 
 

@@ -205,12 +205,7 @@ while menu != 5:
     print("4. Delete Patient Data")
     print("5. Exit")
 
-    try:
-        menu = int(input("Please Select The Number of Menu: "))
-    except:
-        print("The Selected Menu Does Not Exist, Please Select The Existing Number of Menu")
-        input("Press Enter to continue...") 
-        continue
+    menu = int(get_valid_input("Please Select The Number of Menu: ", val_must_digit))
 
     match menu:
         case 1:

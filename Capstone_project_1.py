@@ -188,34 +188,36 @@ def delete_patient():
     else:
         print(f"\n{patient_id} not found!\n")
 
+def main_menu():
+    menu = 0
+    while menu != 5:
+        os.system("cls")
+        print("--- Hospital Patient Management System ---")
+        print("==========================================")
+        print("List menu: ")
+        print("1. View Patient Data")
+        print("2. Add a NewPatient Data")
+        print("3. Update Patient Data")
+        print("4. Delete Patient Data")
+        print("5. Exit")
 
-menu = 0
-while menu != 5:
-    os.system("cls")
-    print("--- Hospital Patient Management System ---")
-    print("==========================================")
-    print("List menu: ")
-    print("1. View Patient Data")
-    print("2. Add a NewPatient Data")
-    print("3. Update Patient Data")
-    print("4. Delete Patient Data")
-    print("5. Exit")
+        menu = int(get_valid_input("Please Select The Number of Menu: ", val_must_digit))
 
-    menu = int(get_valid_input("Please Select The Number of Menu: ", val_must_digit))
+        match menu:
+            case 1:
+                show_patient()
+            case 2:
+                add_patient()
+            case 3:
+                update_patient()
+            case 4:
+                delete_patient()
+            case 5: 
+                print("Exiting the program...")
+            case _:
+                print("Invalid input. Please enter a number between 1 and 5.")
 
-    match menu:
-        case 1:
-            show_patient()
-        case 2:
-            add_patient()
-        case 3:
-            update_patient()
-        case 4:
-            delete_patient()
-        case 5: 
-            print("Exiting the program...")
-        case _:
-            print("Invalid input. Please enter a number between 1 and 5.")
+        input("Press Enter to continue...") 
 
-    input("Press Enter to continue...") 
+main_menu()
 

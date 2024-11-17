@@ -142,12 +142,8 @@ def update_patient():
             print("6. Contact Info")
             print("7. Doctor")
             print("8. Finish Updating")
-            
-            try:
-                choice = int(input("Enter your choice: "))
-            except ValueError:
-                print("Invalid input. Please enter a number.")
-                continue
+
+            choice = int(get_valid_input("Enter your choice: ", val_must_digit))
 
             match choice:
                 case 1:
